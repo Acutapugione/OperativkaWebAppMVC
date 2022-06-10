@@ -24,10 +24,13 @@ namespace Operativka.Data
         public DbSet<Operativka.Models.PlanningIndicator>? PlanningIndicators { get; set; }
 
         public DbSet<Operativka.Models.ActionsDocument>? ActionsDocuments { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            
+            builder.Entity<Consumer>().ToTable(nameof(Consumers));
+            builder.Entity<ApplicationObjective>().ToTable(nameof(ApplicationObjectives));
+            builder.Entity<ApplicationDocument>().ToTable(nameof(ApplicationDocuments));
+
             builder.Entity<ActionsDocument>().ToTable(nameof(ActionsDocuments));
             builder.Entity<PlanningIndicator>().ToTable(nameof(PlanningIndicators));
             builder.Entity<ConsumerCategorie>().ToTable(nameof(ConsumerCategories));
@@ -40,5 +43,11 @@ namespace Operativka.Data
             builder.Entity<District>().ToTable(nameof(Districts));
             //base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<Operativka.Models.Consumer>? Consumers { get; set; }
+
+        public DbSet<Operativka.Models.ApplicationDocument>? ApplicationDocuments { get; set; }
+
+        public DbSet<Operativka.Models.ApplicationObjective>? ApplicationObjectives { get; set; }
     }
 }
