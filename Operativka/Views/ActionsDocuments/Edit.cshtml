@@ -1,0 +1,60 @@
+﻿@model Operativka.Models.ActionsDocument
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>ActionsDocument</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Settlement" class="control-label"></label>
+                <select asp-for="SettlementId" class="form-control" asp-items="ViewBag.Settlements"></select>
+                <span asp-validation-for="SettlementId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConsumerCategorie" class="control-label"></label>
+                <select asp-for="ConsumerCategorieId" class="form-control" asp-items="ViewBag.ConsumerCategories"></select>
+                <span asp-validation-for="ConsumerCategorieId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlanningIndicator" class="control-label"></label>
+                <select asp-for="PlanningIndicatorId" class="form-control" asp-items="ViewBag.PlanningIndicators"></select>
+                <span asp-validation-for="PlanningIndicatorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Plan_Count" class="control-label"></label>
+                <input asp-for="Plan_Count" class="form-control" />
+                <span asp-validation-for="Plan_Count" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fact_Count" class="control-label"></label>
+                <input asp-for="Fact_Count" class="form-control" />
+                <span asp-validation-for="Fact_Count" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

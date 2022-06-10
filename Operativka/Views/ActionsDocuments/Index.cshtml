@@ -1,0 +1,128 @@
+﻿@*@model IEnumerable<Operativka.Models.ActionsDocument>*@
+@model Operativka.Models.ActionsDocumentViewModel
+
+@{
+    ViewData["Title"] = "Список";
+}
+<p>
+    <a asp-action="Create">Додати новий</a>
+</p>
+
+<form asp-action="Index" >
+    <p>
+        <div class="form-group">
+            <label asp-for="SelectedDistrict" class="form-label"></label>
+            <select asp-for="SelectedDistrict" asp-items="Model.Districts" class="form-control" >
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="SelectedSettlement" class="form-label"></label>
+            <select asp-for="SelectedSettlement" class="form-control" asp-items="Model.Settlements">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="SelectedConsumerCategorie" class="form-label"></label>
+            <select asp-for="SelectedConsumerCategorie" class="form-control" asp-items="Model.ConsumerCategories">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="SelectedPlanningIndicator" class="form-label"></label>
+            <select asp-for="SelectedPlanningIndicator" class="form-control" asp-items="Model.PlanningIndicators">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Пошук" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-danger">Скинути пошук</a>
+        </div>
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" >
+                    @Html.DisplayNameFor(model => model.Documents[0].Date)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["SettlementSortParm"]" 
+                asp-route-currentFilter="@Model.CurrentFilter["Settlement"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].Settlement)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ConsumerCategorieSortParm"]" 
+                asp-route-currentFilter="@Model.CurrentFilter["ConsumerCategorie"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].ConsumerCategorie)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PlanningIndicatorSortParm"]"
+                 asp-route-currentFilter="@Model.CurrentFilter["PlanningIndicator"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].PlanningIndicator)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ActualPercentSortParm"]" >
+                    @Html.DisplayNameFor(model => model.Documents[0].ActualPercent)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Documents)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Settlement.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConsumerCategorie.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlanningIndicator.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActualPercent)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Деталі</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Вилучити</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@{
+    var prevDisabled = !Model.Documents.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Documents.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Documents.PageIndex - 1)"
+   asp-route-filterJsoned="@Json.Serialize(Model.CurrentFilter)"
+   class="btn btn-default @prevDisabled">
+    @*asp-route-currentFilter="@ViewData["CurrentFilter"]"*@
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Documents.PageIndex + 1)"
+  asp-route-filterJsoned="@Json.Serialize(Model.CurrentFilter)"
+   class="btn btn-default @nextDisabled">
+    @* asp-route-currentFilter="@ViewData["CurrentFilter"]"*@
+    Next
+</a>
