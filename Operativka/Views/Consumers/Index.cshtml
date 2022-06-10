@@ -1,38 +1,66 @@
-﻿@model IEnumerable<Operativka.Models.Consumer>
+﻿@*@model IEnumerable<Operativka.Models.Consumer>*@
+    @model Operativka.Models.ConsumerViewModel
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Список";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Додати новий</a>
 </p>
+
+<form asp-action="Index" >
+    <p>
+        <div class="form-group">
+            <label asp-for="SelectedDistrict" class="form-label"></label>
+            <select asp-for="SelectedDistrict" asp-items="Model.Districts" class="form-control" >
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="InsertedPersonalAccountCode" class="form-label"></label>
+            <input asp-for="InsertedPersonalAccountCode" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Пошук" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-danger">Скинути пошук</a>
+        </div>
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FullName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["FullNameParam"]" >
+                    @Html.DisplayNameFor(model => model.Consumers[0].FullName)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PersonalAccountCode)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PersonalAccountCodeParam"]" >
+                    @Html.DisplayNameFor(model => model.Consumers[0].PersonalAccountCode)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DistrictParam"]" >
+                    @Html.DisplayNameFor(model => model.Consumers[0].District)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressParam"]" >
+                    @Html.DisplayNameFor(model => model.Consumers[0].Address)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.District)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PhoneNumberParam"]" >
+                    @Html.DisplayNameFor(model => model.Consumers[0].PhoneNumber)
+                </a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Consumers)
         {
             <tr>
                 <td>
@@ -42,20 +70,42 @@
                     @Html.DisplayFor(modelItem => item.PersonalAccountCode)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.District.Name)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Address)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.District.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Деталі</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Вилучити</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.Consumers.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Consumers.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Consumers.PageIndex - 1)"
+   asp-route-filterJsoned="@Json.Serialize(Model.CurrentFilter)"
+   class="btn btn-default @prevDisabled">
+    @*asp-route-currentFilter="@ViewData["CurrentFilter"]"*@
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Consumers.PageIndex + 1)"
+  asp-route-filterJsoned="@Json.Serialize(Model.CurrentFilter)"
+   class="btn btn-default @nextDisabled">
+    @* asp-route-currentFilter="@ViewData["CurrentFilter"]"*@
+    Next
+</a>

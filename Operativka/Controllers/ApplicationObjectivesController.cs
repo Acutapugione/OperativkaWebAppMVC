@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Operativka.Models;
 
 namespace Operativka.Controllers
 {
+    [Authorize]
     public class ApplicationObjectivesController : Controller
     {
         private readonly OperativkaContext _context;
@@ -44,7 +46,7 @@ namespace Operativka.Controllers
 
             return View(applicationObjective);
         }
-
+        [Authorize(Roles = "Moderator")]
         // GET: ApplicationObjectives/Create
         public IActionResult Create()
         {
@@ -57,6 +59,7 @@ namespace Operativka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Create([Bind("Id,Type,PlannedDate,ExecutionDate,IsExecuted,ApplicationDocumentId")] ApplicationObjective applicationObjective)
         {
             if (ModelState.IsValid)
@@ -68,7 +71,7 @@ namespace Operativka.Controllers
             ViewData["ApplicationDocumentId"] = new SelectList(_context.ApplicationDocuments, "Id", "Id", applicationObjective.ApplicationDocumentId);
             return View(applicationObjective);
         }
-
+        [Authorize(Roles = "Moderator")]
         // GET: ApplicationObjectives/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -91,6 +94,7 @@ namespace Operativka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Type,PlannedDate,ExecutionDate,IsExecuted,ApplicationDocumentId")] ApplicationObjective applicationObjective)
         {
             if (id != applicationObjective.Id)
@@ -121,7 +125,7 @@ namespace Operativka.Controllers
             ViewData["ApplicationDocumentId"] = new SelectList(_context.ApplicationDocuments, "Id", "Id", applicationObjective.ApplicationDocumentId);
             return View(applicationObjective);
         }
-
+        [Authorize(Roles = "Moderator")]
         // GET: ApplicationObjectives/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -140,7 +144,7 @@ namespace Operativka.Controllers
 
             return View(applicationObjective);
         }
-
+        [Authorize(Roles = "Moderator")]
         // POST: ApplicationObjectives/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
