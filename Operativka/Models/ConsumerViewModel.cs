@@ -13,7 +13,7 @@ namespace Operativka.Models
         [Display(Name = "Дільниця")]
         public string? SelectedDistrict { get; set; }
 
-        [Display(Name = nameof(Consumer.PersonalAccountCode))]
+        [Display(Name = "Особовий рахунок")]
         public string? InsertedPersonalAccountCode { get; set; }
 
         public int? pageNumber { get; set; }

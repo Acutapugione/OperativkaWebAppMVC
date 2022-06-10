@@ -34,6 +34,37 @@ namespace Operativka.Data.Seed
 
                 context.SaveChanges();
             }
+
+            if (!context.ConsumerCategories.Any())
+            {
+                HashSet<ConsumerCategorie> consumerCategories = new()
+                {
+                    new ConsumerCategorie { Name = "Відключені споживачі", Description = "Споживачі, що відключені від газорозподільної системи." },
+                    new ConsumerCategorie { Name = "Споживачі з лічильниками", Description = "Споживачі, що підключені до газорозподільної системи та мають встановлений ПЛГ." },
+                    new ConsumerCategorie { Name = "Споживачі без лічильників", Description = "Споживачі, що підключені до газорозподільної системи але не мають встановлений ПЛГ." },
+                    new ConsumerCategorie { Name = "Проблемні споживачі", Description = "Споживачі, що перешкоджають діяльності газорозподільної системи." },
+                    new ConsumerCategorie { Name = "Опломбовані споживачі", Description = "Споживачі, що підключені до газорозподільної системи але опломбовані." },
+                };
+                context.ConsumerCategories.AddRange(consumerCategories);
+
+                context.SaveChanges();
+            }
+
+            if (!context.PlanningIndicators.Any())
+            {
+                HashSet<PlanningIndicator> planningIndicators = new()
+                {
+                    new PlanningIndicator { Name = "Відключення", Name_Fact = "Відключено" },
+                    new PlanningIndicator { Name = "Зняття показників", Name_Fact = "Знято показників" },
+                    new PlanningIndicator { Name = "Інвентаризація", Name_Fact = "Проведено інвентаризації" },
+                    new PlanningIndicator { Name = "ІТР", Name_Fact = "ІТР" },
+                    new PlanningIndicator { Name = "Слюсарі", Name_Fact = "Слюсарі" },
+                    new PlanningIndicator { Name = "Контролери", Name_Fact = "Контролери" },
+                };
+                context.PlanningIndicators.AddRange(planningIndicators);
+
+                context.SaveChanges();
+            }
         }
     }
 }

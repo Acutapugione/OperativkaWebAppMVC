@@ -7,10 +7,10 @@ using Operativka.Areas.Identity.Models;
 using Operativka.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("OperativkaIdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'OperativkaIdentityContextConnection' not found.");
+var identityConnectionString = builder.Configuration.GetConnectionString("OperativkaIdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'OperativkaIdentityContextConnection' not found.");
 
 builder.Services.AddDbContext<OperativkaIdentityContext>(options =>
-    options.UseSqlServer(connectionString));;
+    options.UseSqlServer(identityConnectionString));;
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //    .AddEntityFrameworkStores<OperativkaIdentityContext>();;
@@ -20,8 +20,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddDefaultUI()
             .AddDefaultTokenProviders();
 
+var dataConnectionString = builder.Configuration.GetConnectionString("OperativkaContext") ?? throw new InvalidOperationException("Connection string 'OperativkaContext' not found.");
+
 builder.Services.AddDbContext<OperativkaContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("OperativkaContext") ?? throw new InvalidOperationException("Connection string 'OperativkaContext' not found.")));
+    options.UseSqlServer(dataConnectionString));;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -74,9 +76,6 @@ using (var scope = app.Services.CreateScope())
         var logger = loggerFactory.CreateLogger<Program>();
         logger.LogError(ex, "An error occurred seeding the identity DB.");
     }
-    /*Identity:Accounts:SuperAdmin:Credentials:UserName = AcutaPugione
-Identity:Accounts:SuperAdmin:Credentials:Pwd = AcutaPugione!2022$*/
-
 }
 
 
