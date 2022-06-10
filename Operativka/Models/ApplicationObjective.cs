@@ -8,7 +8,7 @@ namespace Operativka.Models
     {
         public int Id { get; set; }
 
-        [Display(Name = "Ціль заявки")]
+        [Display(Name = "Тип цілі заявки")]
         public ApplicationObjectiveTypes Type { get; set; }
 
         [Display(Name = "Дата запланована")]
@@ -21,7 +21,12 @@ namespace Operativka.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? ExecutionDate { get; set; }
 
+        [Display(Name = "Виконано")]
+        public bool IsExecuted { get; set; } = false;
+
+        [Display(Name = "Документ")]
         public ApplicationDocument ApplicationDocument { get; set; }
         public int ApplicationDocumentId { get; set; }
+
     }
 }

@@ -23,6 +23,10 @@ namespace Operativka.Models
         [Display(Name = "Адреса")]
         public string? Address { get; set; }
 
+        [Display(Name = "Номер телефону")]
+        [Phone]
+        public string? PhoneNumber { get; set; }
+
         [Display(Name = "Особовий рахунок")]
         public int? PersonalAccountCode { get; set; }
 
