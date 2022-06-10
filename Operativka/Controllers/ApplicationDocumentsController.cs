@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Operativka.Models;
 
 namespace Operativka.Controllers
 {
+    [Authorize]
     public class ApplicationDocumentsController : Controller
     {
         private readonly OperativkaContext _context;
@@ -46,6 +48,7 @@ namespace Operativka.Controllers
         }
 
         // GET: ApplicationDocuments/Create
+        [Authorize(Roles = "Moderator")]
         public IActionResult Create()
         {
             ViewData["ConsumerId"] = new SelectList(_context.Consumers, "Id", "FullName");
@@ -57,6 +60,7 @@ namespace Operativka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Create([Bind("Id,ConsumerId,OuterAppNum,IsFromOuterApp")] ApplicationDocument applicationDocument)
         {
             if (ModelState.IsValid)
@@ -70,6 +74,7 @@ namespace Operativka.Controllers
         }
 
         // GET: ApplicationDocuments/Edit/5
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ApplicationDocuments == null)
@@ -91,6 +96,7 @@ namespace Operativka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ConsumerId,OuterAppNum,IsFromOuterApp")] ApplicationDocument applicationDocument)
         {
             if (id != applicationDocument.Id)
@@ -123,6 +129,7 @@ namespace Operativka.Controllers
         }
 
         // GET: ApplicationDocuments/Delete/5
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ApplicationDocuments == null)
@@ -144,6 +151,7 @@ namespace Operativka.Controllers
         // POST: ApplicationDocuments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.ApplicationDocuments == null)
