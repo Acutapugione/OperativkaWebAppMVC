@@ -7,10 +7,37 @@ using Operativka.Areas.Identity.Models;
 using Operativka.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var services = builder.Services;
+var configuration = builder.Configuration;
+
+services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+        googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+    })
+    .AddMicrosoftAccount(microsoftOptions =>
+    {
+        microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
+        microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+    });;
+    //.AddTwitter(twitterOptions =>
+    //{
+    //    twitterOptions.ConsumerKey = configuration["Authentication:Twitter:ConsumerAPIKey"];
+    //    twitterOptions.ConsumerSecret = configuration["Authentication:Twitter:ConsumerSecret"];
+    //})
+    //.AddFacebook(facebookOptions =>
+    //{
+    //    facebookOptions.AppId = configuration["Authentication:Facebook:AppId"];
+    //    facebookOptions.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+    //}); ;
+
+
 var identityConnectionString = builder.Configuration.GetConnectionString("OperativkaIdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'OperativkaIdentityContextConnection' not found.");
 
 builder.Services.AddDbContext<OperativkaIdentityContext>(options =>
-    options.UseSqlServer(identityConnectionString));;
+    options.UseSqlServer(identityConnectionString)); ;
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //    .AddEntityFrameworkStores<OperativkaIdentityContext>();;
@@ -23,7 +50,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 var dataConnectionString = builder.Configuration.GetConnectionString("OperativkaContext") ?? throw new InvalidOperationException("Connection string 'OperativkaContext' not found.");
 
 builder.Services.AddDbContext<OperativkaContext>(options =>
-    options.UseSqlServer(dataConnectionString));;
+    options.UseSqlServer(dataConnectionString)); ;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -45,13 +72,13 @@ else
 
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+    var serviceProvider = scope.ServiceProvider;
+    var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
 
     //Seeds the main db
     try
     {
-        var context = services.GetRequiredService<OperativkaContext>();
+        var context = serviceProvider.GetRequiredService<OperativkaContext>();
         context.Database.EnsureCreated();
         DataSeeder.ExecuteSeed(context);
     }
@@ -60,12 +87,12 @@ using (var scope = app.Services.CreateScope())
         var logger = loggerFactory.CreateLogger<Program>();
         logger.LogError(ex, "An error occurred seeding the main DB.");
     }
-    
+
     //Seeds the identity db
     try
     {
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var seeder = new ContextSeeder(builder.Configuration);
         await seeder.SeedRolesAsync(userManager, roleManager);
         await seeder.SeedSuperAdminAsync(userManager, roleManager);
@@ -83,7 +110,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+app.UseAuthentication();
 
 app.UseAuthorization();
 
