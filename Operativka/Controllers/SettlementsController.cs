@@ -64,14 +64,16 @@ namespace Operativka.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,DistrictId")] Settlement settlement)
         {
             settlement.District = await _context.Districts.FirstOrDefaultAsync(x => x.Id == settlement.DistrictId);
-            if (settlement.District!=null)
+            ModelState.Clear();
+            TryValidateModel(settlement);
+            if (!ModelState.IsValid)
             {
-                _context.Add(settlement);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Name", settlement.DistrictId);
+                return View(settlement);
             }
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Name", settlement.DistrictId);
-            return View(settlement);
+            _context.Add(settlement);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Settlements/Edit/5
@@ -106,28 +108,30 @@ namespace Operativka.Controllers
             }
 
             settlement.District = await _context.Districts.FirstOrDefaultAsync(x => x.Id == settlement.DistrictId);
-            if (settlement.District != null)
+            ModelState.Clear();
+            TryValidateModel(settlement);
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(settlement);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SettlementExists(settlement.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Name", settlement.DistrictId);
+                return View(settlement);
             }
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Name", settlement.DistrictId);
-            return View(settlement);
+            try
+            {
+                _context.Update(settlement);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SettlementExists(settlement.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Settlements/Delete/5

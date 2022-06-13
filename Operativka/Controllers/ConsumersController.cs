@@ -173,14 +173,16 @@ namespace Operativka.Controllers
         public async Task<IActionResult> Create([Bind(RequiredFieldNames)] Consumer consumer)
         {
             await SetFields(consumer);
-            if (CheckFields(consumer))
+            ModelState.Clear();
+            TryValidateModel(consumer);
+            if (!ModelState.IsValid)
             {
-                _context.Add(consumer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await FillViewDataAsync(consumer);
+                return View();
             }
-            await FillViewDataAsync(consumer);
-            return View();
+            _context.Add(consumer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private async Task FillViewDataAsync(Consumer? consumer = null)
@@ -233,30 +235,32 @@ namespace Operativka.Controllers
             {
                 return NotFound();
             }
-            await SetFields(consumer);
-            if (CheckFields(consumer))
-            {
-                try
-                {
-                    _context.Update(consumer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ConsumerExists(consumer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
 
-            await FillViewDataAsync(consumer);
-            return View(consumer);
+            await SetFields(consumer);
+            ModelState.Clear();
+            TryValidateModel(consumer);
+            if (!ModelState.IsValid)
+            {
+                await FillViewDataAsync(consumer);
+                return View(consumer);
+            }
+            try
+            {
+                _context.Update(consumer);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ConsumerExists(consumer.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Consumers/Delete/5

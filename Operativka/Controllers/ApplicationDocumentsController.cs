@@ -63,6 +63,7 @@ namespace Operativka.Controllers
         [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Create([Bind("Id,ConsumerId,OuterAppNum,IsFromOuterApp")] ApplicationDocument applicationDocument)
         {
+            
             if (ModelState.IsValid)
             {
                 _context.Add(applicationDocument);

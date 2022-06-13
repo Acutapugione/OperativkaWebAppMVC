@@ -255,31 +255,32 @@ namespace Operativka.Controllers
         public async Task<IActionResult> Create([Bind(RequiredFieldNames)] ActionsDocument actionsDocument)
         {
             await SetFields(actionsDocument);
-            var isCorrect = CheckFields(actionsDocument);
-            if (isCorrect)
+            ModelState.Clear();
+            TryValidateModel(actionsDocument);
+            if (!ModelState.IsValid)
             {
-                _context.Add(actionsDocument);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var categorieQuery =
+                    from doc in _context.ConsumerCategories
+                    orderby doc.Name
+                    select doc;
+
+                var planIndicatorQuery =
+                    from doc in _context.PlanningIndicators
+                    orderby doc.Name
+                    select doc;
+
+                var settlementQuery =
+                    from doc in _context.Settlements
+                    orderby doc.Name
+                    select doc;
+                ViewData["Settlements"] = new SelectList(await settlementQuery.Distinct().ToListAsync(), "Id", "Name");
+                ViewData["PlanningIndicators"] = new SelectList(await planIndicatorQuery.Distinct().ToListAsync(), "Id", "Name");
+                ViewData["ConsumerCategories"] = new SelectList(await categorieQuery.Distinct().ToListAsync(), "Id", "Name");
+                return View();
             }
-            var categorieQuery =
-                from doc in _context.ConsumerCategories
-                orderby doc.Name
-                select doc;
-
-            var planIndicatorQuery =
-                from doc in _context.PlanningIndicators
-                orderby doc.Name
-                select doc;
-
-            var settlementQuery =
-                from doc in _context.Settlements
-                orderby doc.Name
-                select doc;
-            ViewData["Settlements"] = new SelectList(await settlementQuery.Distinct().ToListAsync(), "Id", "Name");
-            ViewData["PlanningIndicators"] = new SelectList(await planIndicatorQuery.Distinct().ToListAsync(), "Id", "Name");
-            ViewData["ConsumerCategories"] = new SelectList(await categorieQuery.Distinct().ToListAsync(), "Id", "Name");
-            return View();
+            _context.Add(actionsDocument);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private static bool CheckFields(ActionsDocument actionsDocument)
@@ -353,43 +354,44 @@ namespace Operativka.Controllers
                 return NotFound();
             }
             await SetFields(actionsDocument);
-            var isCorrect = CheckFields(actionsDocument);
-            if (isCorrect)
+            ModelState.Clear();
+            TryValidateModel(actionsDocument);
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(actionsDocument);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ActionsDocumentExists(actionsDocument.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var categorieQuery =
+                     from doc in _context.ConsumerCategories
+                     orderby doc.Name
+                     select doc;
+                var planIndicatorQuery =
+                    from doc in _context.PlanningIndicators
+                    orderby doc.Name
+                    select doc;
+                var settlementQuery =
+                    from doc in _context.Settlements
+                    orderby doc.Name
+                    select doc;
+                ViewData["Settlements"] = new SelectList(await settlementQuery.Distinct().ToListAsync(), "Id", "Name", actionsDocument.Settlement);
+                ViewData["PlanningIndicators"] = new SelectList(await planIndicatorQuery.Distinct().ToListAsync(), "Id", "Name", actionsDocument.PlanningIndicator);
+                ViewData["ConsumerCategories"] = new SelectList(await categorieQuery.Distinct().ToListAsync(), "Id", "Name", actionsDocument.ConsumerCategorie);
+                return View(actionsDocument);
             }
-            var categorieQuery =
-                 from doc in _context.ConsumerCategories
-                 orderby doc.Name
-                 select doc;
-            var planIndicatorQuery =
-                from doc in _context.PlanningIndicators
-                orderby doc.Name
-                select doc;
-            var settlementQuery =
-                from doc in _context.Settlements
-                orderby doc.Name
-                select doc;
-            ViewData["Settlements"] = new SelectList(await settlementQuery.Distinct().ToListAsync(), "Id", "Name", actionsDocument.Settlement);
-            ViewData["PlanningIndicators"] = new SelectList(await planIndicatorQuery.Distinct().ToListAsync(), "Id", "Name", actionsDocument.PlanningIndicator);
-            ViewData["ConsumerCategories"] = new SelectList(await categorieQuery.Distinct().ToListAsync(), "Id", "Name", actionsDocument.ConsumerCategorie);
-            return View(actionsDocument);
+            try
+            {
+                _context.Update(actionsDocument);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ActionsDocumentExists(actionsDocument.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Moderator")]
