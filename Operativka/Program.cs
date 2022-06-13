@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Operativka.Areas.Identity.Models;
 using Operativka.Areas.Identity.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.Google;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +16,15 @@ var configuration = builder.Configuration;
 services.AddAuthentication()
     .AddGoogle(googleOptions =>
     {
+        configuration.GetSection("Authentication:Google").Bind(googleOptions);
         googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
         googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
     })
-    .AddMicrosoftAccount(microsoftOptions =>
-    {
-        microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-        microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+.AddMicrosoftAccount(microsoftOptions =>
+{
+        configuration.GetSection("Authentication:Microsoft").Bind(microsoftOptions);
+        //microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
+        //microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
     });;
     //.AddTwitter(twitterOptions =>
     //{
