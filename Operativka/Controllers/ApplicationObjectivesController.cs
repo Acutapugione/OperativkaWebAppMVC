@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Operativka.Data;
 using Operativka.Models;
+using static Operativka.Areas.Identity.Models.Enums;
 
 namespace Operativka.Controllers
 {
@@ -48,10 +49,19 @@ namespace Operativka.Controllers
         }
         [Authorize(Roles = "Moderator")]
         // GET: ApplicationObjectives/Create
-        public IActionResult Create()
+        public IActionResult Create(int documentID)
         {
-            ViewData["ApplicationDocumentId"] = new SelectList(_context.ApplicationDocuments, "Id", "Id");
-            return View();
+            ApplicationObjective objective = new()
+            {
+                ApplicationDocumentId = documentID
+            };
+            ViewBag.Types = Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList();
+
+            return View(objective);
         }
 
         // POST: ApplicationObjectives/Create
@@ -62,15 +72,30 @@ namespace Operativka.Controllers
         [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Create([Bind("Id,Type,PlannedDate,ExecutionDate,IsExecuted,ApplicationDocumentId")] ApplicationObjective applicationObjective)
         {
+            if (applicationObjective is null)
+            {
+                return View(nameof(Create));
+            }
+            applicationObjective.ApplicationDocument = await _context
+                .ApplicationDocuments
+                .FirstOrDefaultAsync(x => x.Id == applicationObjective.ApplicationDocumentId);
+            ModelState.Clear();
+            TryValidateModel(applicationObjective);
             if (ModelState.IsValid)
             {
                 _context.Add(applicationObjective);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit), "ApplicationDocuments", new { id = applicationObjective.ApplicationDocumentId });
             }
-            ViewData["ApplicationDocumentId"] = new SelectList(_context.ApplicationDocuments, "Id", "Id", applicationObjective.ApplicationDocumentId);
+            ViewBag.Types = Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList();
+
             return View(applicationObjective);
         }
+
         [Authorize(Roles = "Moderator")]
         // GET: ApplicationObjectives/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -85,7 +110,12 @@ namespace Operativka.Controllers
             {
                 return NotFound();
             }
-            ViewData["ApplicationDocumentId"] = new SelectList(_context.ApplicationDocuments, "Id", "Id", applicationObjective.ApplicationDocumentId);
+            ViewBag.Types = Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList();
+
             return View(applicationObjective);
         }
 
@@ -101,7 +131,11 @@ namespace Operativka.Controllers
             {
                 return NotFound();
             }
-
+            applicationObjective.ApplicationDocument = await _context
+               .ApplicationDocuments
+               .FirstOrDefaultAsync(x => x.Id == applicationObjective.ApplicationDocumentId);
+            ModelState.Clear();
+            TryValidateModel(applicationObjective);
             if (ModelState.IsValid)
             {
                 try
@@ -120,9 +154,14 @@ namespace Operativka.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit), "ApplicationDocuments", new { id = applicationObjective.ApplicationDocumentId });
             }
-            ViewData["ApplicationDocumentId"] = new SelectList(_context.ApplicationDocuments, "Id", "Id", applicationObjective.ApplicationDocumentId);
+            ViewBag.Types =  Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = ((int)v).ToString()
+            }).ToList();
+          
             return View(applicationObjective);
         }
         [Authorize(Roles = "Moderator")]
@@ -161,7 +200,7 @@ namespace Operativka.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Edit), "ApplicationDocuments", new { id = applicationObjective.ApplicationDocumentId });
         }
 
         private bool ApplicationObjectiveExists(int id)

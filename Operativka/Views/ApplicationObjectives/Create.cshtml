@@ -13,9 +13,10 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ApplicationDocumentId" />
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <select asp-for="Type" class="form-control"></select>
+                <select asp-for="Type" class="form-control" asp-items="ViewBag.Types"></select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -32,10 +33,6 @@
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsExecuted" /> @Html.DisplayNameFor(model => model.IsExecuted)
                 </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApplicationDocumentId" class="control-label"></label>
-                <select asp-for="ApplicationDocumentId" class ="form-control" asp-items="ViewBag.ApplicationDocumentId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

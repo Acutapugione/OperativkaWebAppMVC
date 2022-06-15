@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Operativka.Models
 {
@@ -13,20 +14,20 @@ namespace Operativka.Models
         [Display(Name = "Дата запланована")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? PlannedDate => ApplicationObjectives.Min(obj => obj.PlannedDate);
+        public DateTime? PlannedDate => (ApplicationObjectives is null || ApplicationObjectives.Count == 0) ? DateTime.Now : ApplicationObjectives.Min(obj => obj.PlannedDate);
 
         [Display(Name = "Дата виконання")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? ExecutionDate => ApplicationObjectives.Max(obj => obj.ExecutionDate);
+        public DateTime? ExecutionDate => (ApplicationObjectives is null || ApplicationObjectives.Count == 0) ? DateTime.Now : ApplicationObjectives.Max(obj => obj.ExecutionDate);
 
         [Display(Name = "Виконано")]
-        public bool IsExecuted => ApplicationObjectives.All(obj => obj.IsExecuted);
+        public bool IsExecuted => (ApplicationObjectives is null || ApplicationObjectives.Count==0)? false: ApplicationObjectives.All(obj => obj.IsExecuted);
 
         [Display(Name = "Перелік цілей заявки")]
-        public IEnumerable<ApplicationObjective>? ApplicationObjectives { get; set; }
+        public List<ApplicationObjective>? ApplicationObjectives { get; set; } = new List<ApplicationObjective>();
 
-        [Display(Name ="Номер на сайті")]
+        [Display(Name = "Номер на сайті")]
         public string? OuterAppNum { get; set; }
 
         [Display(Name = "Сайт")]

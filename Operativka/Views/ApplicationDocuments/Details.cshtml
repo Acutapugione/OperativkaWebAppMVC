@@ -11,25 +11,67 @@
     <h4>ApplicationDocument</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Consumer)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Consumer.FullName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.OuterAppNum)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.OuterAppNum)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IsFromOuterApp)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IsFromOuterApp)
         </dd>
     </dl>
+    <table>
+        <thead>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].ExecutionDate)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].PlannedDate)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].Type)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].IsExecuted)
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ApplicationObjectives)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExecutionDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PlannedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsExecuted)
+                    </td>
+                    @*<td>
+                        <a asp-controller="ApplicationObjectives" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="ApplicationObjectives" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-controller="ApplicationObjectives" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

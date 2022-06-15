@@ -24,7 +24,8 @@ namespace Operativka.Controllers
         // GET: ApplicationDocuments
         public async Task<IActionResult> Index()
         {
-            var operativkaContext = _context.ApplicationDocuments.Include(a => a.Consumer);
+            var operativkaContext = _context.ApplicationDocuments
+                .Include(a => a.Consumer);
             return View(await operativkaContext.ToListAsync());
         }
 
@@ -37,6 +38,7 @@ namespace Operativka.Controllers
             }
 
             var applicationDocument = await _context.ApplicationDocuments
+                .Include(a => a.ApplicationObjectives)
                 .Include(a => a.Consumer)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (applicationDocument == null)
@@ -63,7 +65,9 @@ namespace Operativka.Controllers
         [Authorize(Roles = "Moderator")]
         public async Task<IActionResult> Create([Bind("Id,ConsumerId,OuterAppNum,IsFromOuterApp")] ApplicationDocument applicationDocument)
         {
-            
+            applicationDocument.Consumer = await _context.Consumers.Include(x => x.District).FirstAsync(x => x.Id == applicationDocument.ConsumerId);
+            ModelState.Clear();
+            TryValidateModel(applicationDocument);
             if (ModelState.IsValid)
             {
                 _context.Add(applicationDocument);
@@ -83,7 +87,10 @@ namespace Operativka.Controllers
                 return NotFound();
             }
 
-            var applicationDocument = await _context.ApplicationDocuments.FindAsync(id);
+            var applicationDocument = await _context
+                .ApplicationDocuments
+                .Include(x => x.ApplicationObjectives)
+                .FirstAsync(x => x.Id == id);
             if (applicationDocument == null)
             {
                 return NotFound();
@@ -162,16 +169,17 @@ namespace Operativka.Controllers
             var applicationDocument = await _context.ApplicationDocuments.FindAsync(id);
             if (applicationDocument != null)
             {
+                _context.ApplicationObjectives.RemoveRange(applicationDocument.ApplicationObjectives);
                 _context.ApplicationDocuments.Remove(applicationDocument);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ApplicationDocumentExists(int id)
         {
-          return (_context.ApplicationDocuments?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.ApplicationDocuments?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

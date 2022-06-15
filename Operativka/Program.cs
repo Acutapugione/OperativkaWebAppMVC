@@ -7,11 +7,18 @@ using Operativka.Areas.Identity.Models;
 using Operativka.Areas.Identity.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 var configuration = builder.Configuration;
+//services.Configure<ForwardedHeadersOptions>(options =>
+//{
+//    options.ForwardLimit = 2;
+//    options.KnownProxies.Add(IPAddress.Parse("192.168.1.3"));
+//    options.ForwardedForHeaderName = "X-Forwarded-For-My-Custom-Header-Name";
+//});
 
 services.AddAuthentication()
     .AddGoogle(googleOptions =>
@@ -60,7 +67,7 @@ builder.Services.AddDbContext<OperativkaContext>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
+//app.UseForwardedHeaders();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

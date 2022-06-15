@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label asp-for="Consumer" class="control-label"></label>
                 <select asp-for="ConsumerId" class="form-control" asp-items="ViewBag.ConsumerId"></select>
-                <span asp-validation-for="ConsumerId" class="text-danger"></span>
+                <span asp-validation-for="Consumer" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OuterAppNum" class="control-label"></label>
@@ -29,6 +29,49 @@
                     <input class="form-check-input" asp-for="IsFromOuterApp" /> @Html.DisplayNameFor(model => model.IsFromOuterApp)
                 </label>
             </div>
+            <table>
+                <thead>
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].ExecutionDate)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].PlannedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].Type)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].IsExecuted)
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ApplicationObjectives)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExecutionDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlannedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsExecuted)
+                            </td>
+                            <td>
+                                <a asp-controller="ApplicationObjectives" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-controller="ApplicationObjectives" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-controller="ApplicationObjectives" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <a asp-action="Create" asp-controller="ApplicationObjectives" asp-route-parentId="@Model?.Id">Додати ціль заявки</a>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
