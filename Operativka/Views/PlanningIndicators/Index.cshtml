@@ -9,24 +9,24 @@
 <p>
     <a asp-action="Create">Додати новий</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Name_Fact)
             </th>
-            <th></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
+        <tr class="table-primary">
+            <th  scope="row">
                 @Html.DisplayFor(modelItem => item.Name)
-            </td>
+            </th>
             <td>
                 @Html.DisplayFor(modelItem => item.Name_Fact)
             </td>

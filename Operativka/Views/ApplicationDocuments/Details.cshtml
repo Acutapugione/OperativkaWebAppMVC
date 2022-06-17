@@ -29,6 +29,24 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IsFromOuterApp)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PlannedDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PlannedDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ExecutionDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ExecutionDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsExecuted)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsExecuted)
+        </dd>
     </dl>
     <table>
         <thead>
@@ -50,7 +68,7 @@
         <tbody>
             @foreach (var item in Model.ApplicationObjectives)
             {
-                <tr>
+                <tr class="table-primary">
                     <td>
                         @Html.DisplayFor(modelItem => item.ExecutionDate)
                     </td>

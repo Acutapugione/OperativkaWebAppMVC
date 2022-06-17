@@ -14,7 +14,7 @@ namespace Operativka.Models
         [Display(Name = "Дата запланована")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime PlannedDate { get; set; }
+        public DateTime PlannedDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Дата виконання")]
         [DataType(DataType.Date)]

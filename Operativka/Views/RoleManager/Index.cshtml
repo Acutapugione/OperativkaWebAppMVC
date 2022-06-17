@@ -15,15 +15,15 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Role</th>
+            <th scope="col">Id</th>
+            <th scope="col">Role</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var role in Model)
         {
-            <tr>
-                <td>@role.Id</td>
+            <tr class="table-primary">
+                <th  scope="row">@role.Id</th>
                 <td>@role.Name</td>
             </tr>
         }

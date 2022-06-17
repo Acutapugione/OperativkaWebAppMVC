@@ -8,18 +8,18 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Action</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in Model)
         {
-            <tr>
-                <td>@user.FirstName</td>
+            <tr class="table-primary">
+                <th  scope="row">@user.FirstName</th>
                 <td>@user.LastName</td>
                 <td>@user.Email</td>
                 <td>@string.Join(" , ", user.Roles.ToList())</td>
