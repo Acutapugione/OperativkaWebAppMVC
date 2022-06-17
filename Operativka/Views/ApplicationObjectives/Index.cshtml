@@ -10,33 +10,33 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Type)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.PlannedDate)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.ExecutionDate)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.IsExecuted)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.ApplicationDocument)
             </th>
-            <th></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
+        <tr class="table-primary">
+            <th  scope="row">
                 @Html.DisplayFor(modelItem => item.Type)
-            </td>
+            </th>
             <td>
                 @Html.DisplayFor(modelItem => item.PlannedDate)
             </td>

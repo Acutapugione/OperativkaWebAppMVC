@@ -29,7 +29,16 @@
                     <input class="form-check-input" asp-for="IsFromOuterApp" /> @Html.DisplayNameFor(model => model.IsFromOuterApp)
                 </label>
             </div>
-            <table>
+            
+            <a asp-action="Create" asp-controller="ApplicationObjectives" asp-route-ApplicationDocumentId="@Model?.Id">Додати ціль заявки</a>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <table>
                 <thead>
                     <tr>
                         <td>
@@ -44,12 +53,15 @@
                         <td>
                             @Html.DisplayNameFor(x=>x.ApplicationObjectives[0].IsExecuted)
                         </td>
+                        <td>
+
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.ApplicationObjectives)
                     {
-                        <tr>
+                        <tr class="table-primary">
                             <td>
                                 @Html.DisplayFor(modelItem => item.ExecutionDate)
                             </td>
@@ -71,14 +83,7 @@
                     }
                 </tbody>
             </table>
-            <a asp-action="Create" asp-controller="ApplicationObjectives" asp-route-parentId="@Model?.Id">Додати ціль заявки</a>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

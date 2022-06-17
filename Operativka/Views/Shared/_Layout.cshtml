@@ -13,69 +13,55 @@
     @*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Оперативка.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/bootstrap-pulse.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-toggleable-sm  navbar-dark bg-dark border-bottom box-shadow mb-3 container-fluid">
-            @*<a class="navbar-brand" href="#">Navbar</a>*@
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@ViewData["CurrentProject"]</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"><i class="fa fa-navicon" style="color:burlywood; font-size:28px;"></i></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="navbar-collapse collapse d-inline-flex justify-content-between">
-                    <ul class="navbar-nav mr-auto ">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                @*<a class="navbar-brand" href="#">Navbar</a>*@
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@ViewData["CurrentProject"]</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="true" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse show" id="navbarColor02" style="">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReferenceBooks" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Довідники
-                            </a>
-                            <div class="dropdown-menu bg-success text-white" aria-labelledby="navbarDropdown">
-                                <a asp-controller="Settlements" asp-action="Index" class="dropdown-item text-white">Населені пункти</a>
-                                <a asp-controller="Districts" asp-action="Index" class="dropdown-item text-white">Дільниці</a>
-                                <div class="dropdown-divider bg-warning"></div>
-                                <a asp-controller="ConsumerCategories" asp-action="Index" class="dropdown-item text-white">Категорії споживачів</a>
-                                <a asp-controller="PlanningIndicators" asp-action="Index" class="dropdown-item text-white">Показники планування</a>
-                                <div class="dropdown-divider bg-warning"></div>
-                                <a asp-controller="Consumers" asp-action="Index" class="dropdown-item text-white">Споживачі</a>
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Довідники</a>
+                            <div class="dropdown-menu">
+                                <a asp-controller="Settlements" asp-action="Index" class="dropdown-item">Населені пункти</a>
+                                <a asp-controller="Districts" asp-action="Index" class="dropdown-item">Дільниці</a>
+                                <div class="dropdown-divider"></div>
+                                <a asp-controller="ConsumerCategories" asp-action="Index" class="dropdown-item">Категорії споживачів</a>
+                                <a asp-controller="PlanningIndicators" asp-action="Index" class="dropdown-item">Показники планування</a>
+                                <div class="dropdown-divider"></div>
+                                <a asp-controller="Consumers" asp-action="Index" class="dropdown-item">Споживачі</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDocuments" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Документи
-                            </a>
-                            <div class="dropdown-menu bg-success text-white" aria-labelledby="navbarDropdown">
-                                <a asp-controller="ActionsDocuments" asp-action="Index" class="dropdown-item text-white">План-факт</a>
-                                <div class="dropdown-divider bg-warning"></div>
-                                 <a asp-controller="ApplicationDocuments" asp-action="Index" class="dropdown-item text-white">Заявки</a>
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                                <div class="dropdown-divider bg-warning"></div>
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Документи</a>
+                            <div class="dropdown-menu">
+                                <a asp-controller="ActionsDocuments" asp-action="Index" class="dropdown-item">План-факт</a>
+                                <div class="dropdown-divider"></div>
+                                <a asp-controller="ApplicationDocuments" asp-action="Index" class="dropdown-item">Заявки</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDocuments" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Звіти
-                            </a>
-                            <div class="dropdown-menu bg-success text-white" aria-labelledby="navbarDropdown">
-                                <a asp-controller="Reports" asp-action="ActionsDocumentsZvit" class="dropdown-item text-white">План-факт</a>
-                                <div class="dropdown-divider bg-warning"></div>
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                                <div class="dropdown-divider bg-warning"></div>
-                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Звіти</a>
+                            <div class="dropdown-menu">
+                                <a asp-controller="Reports" asp-action="ActionsDocumentsZvit" class="dropdown-item">План-факт</a>
                             </div>
                         </li>
-            
-                    </ul>
+@*                    </ul>
+                    <form class="d-flex">
+                        <input class="form-control me-sm-2" type="text" placeholder="Search">
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    </form>*@
                 </div>
                 <partial name="_LoginPartial" />
             </div>
         </nav>
-       
     </header>
     <div class="container">
         <main role="main" class="pb-3">

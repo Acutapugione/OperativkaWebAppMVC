@@ -9,11 +9,11 @@
 @if (Model.CurrentLogins?.Count > 0)
 {
     <h3>Зареєстровані логіни</h3>
-    <table class="table">
+    <table class="table table-hover">
         <tbody>
             @foreach (var login in Model.CurrentLogins)
             {
-                <tr>
+                <tr class="table-primary">
                     <td id="@($"login-provider-{login.LoginProvider}")">@login.ProviderDisplayName</td>
                     <td>
                         @if (Model.ShowRemoveButton)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +24,11 @@ namespace Operativka.Controllers
             _context = context;
         }
 
+        [Authorize(Roles="SuperAdmin")]
         // GET: ApplicationObjectives
         public async Task<IActionResult> Index()
         {
-            var operativkaContext = _context.ApplicationObjectives.Include(a => a.ApplicationDocument);
+            var operativkaContext = _context.ApplicationObjectives.Include(a => a.ApplicationDocument).ThenInclude(x => x.Consumer).ThenInclude(x => x.District);
             return View(await operativkaContext.ToListAsync());
         }
 
@@ -39,6 +42,8 @@ namespace Operativka.Controllers
 
             var applicationObjective = await _context.ApplicationObjectives
                 .Include(a => a.ApplicationDocument)
+                .ThenInclude(a => a.Consumer)
+                .ThenInclude(a => a.District)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (applicationObjective == null)
             {
@@ -49,15 +54,17 @@ namespace Operativka.Controllers
         }
         [Authorize(Roles = "Moderator")]
         // GET: ApplicationObjectives/Create
-        public IActionResult Create(int documentID)
+        public IActionResult Create(int ApplicationDocumentId)
         {
             ApplicationObjective objective = new()
             {
-                ApplicationDocumentId = documentID
+                ApplicationDocumentId = ApplicationDocumentId,
+                PlannedDate = DateTime.Now,
             };
+
             ViewBag.Types = Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
             {
-                Text = v.ToString(),
+                Text = v.GetDisplayName(),
                 Value = ((int)v).ToString()
             }).ToList();
 
@@ -78,7 +85,16 @@ namespace Operativka.Controllers
             }
             applicationObjective.ApplicationDocument = await _context
                 .ApplicationDocuments
+                .Include(x => x.Consumer)
+                .ThenInclude(x => x.District)
                 .FirstOrDefaultAsync(x => x.Id == applicationObjective.ApplicationDocumentId);
+            if (applicationObjective.IsExecuted == true && applicationObjective.ExecutionDate is null)
+            {
+                applicationObjective.ExecutionDate = DateTime.Now;
+            }else if (applicationObjective.ExecutionDate is not null)
+            {
+                applicationObjective.IsExecuted = true;
+            }
             ModelState.Clear();
             TryValidateModel(applicationObjective);
             if (ModelState.IsValid)
@@ -89,7 +105,7 @@ namespace Operativka.Controllers
             }
             ViewBag.Types = Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
             {
-                Text = v.ToString(),
+                Text = v.GetDisplayName(),
                 Value = ((int)v).ToString()
             }).ToList();
 
@@ -105,14 +121,15 @@ namespace Operativka.Controllers
                 return NotFound();
             }
 
-            var applicationObjective = await _context.ApplicationObjectives.FindAsync(id);
+            var applicationObjective = await _context.ApplicationObjectives
+                .FindAsync(id);
             if (applicationObjective == null)
             {
                 return NotFound();
             }
             ViewBag.Types = Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
             {
-                Text = v.ToString(),
+                Text = v.GetDisplayName(),
                 Value = ((int)v).ToString()
             }).ToList();
 
@@ -133,7 +150,17 @@ namespace Operativka.Controllers
             }
             applicationObjective.ApplicationDocument = await _context
                .ApplicationDocuments
+               .Include(x => x.Consumer)
+               .ThenInclude(x => x.District)
                .FirstOrDefaultAsync(x => x.Id == applicationObjective.ApplicationDocumentId);
+            if (applicationObjective.IsExecuted == true && applicationObjective.ExecutionDate is null)
+            {
+                applicationObjective.ExecutionDate = DateTime.Now;
+            }
+            else if (applicationObjective.ExecutionDate is not null)
+            {
+                applicationObjective.IsExecuted = true;
+            }
             ModelState.Clear();
             TryValidateModel(applicationObjective);
             if (ModelState.IsValid)
@@ -156,12 +183,12 @@ namespace Operativka.Controllers
                 }
                 return RedirectToAction(nameof(Edit), "ApplicationDocuments", new { id = applicationObjective.ApplicationDocumentId });
             }
-            ViewBag.Types =  Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
+            ViewBag.Types = Enum.GetValues(typeof(ApplicationObjectiveTypes)).Cast<ApplicationObjectiveTypes>().Select(v => new SelectListItem
             {
-                Text = v.ToString(),
+                Text = v.GetDisplayName(),
                 Value = ((int)v).ToString()
             }).ToList();
-          
+
             return View(applicationObjective);
         }
         [Authorize(Roles = "Moderator")]
@@ -175,6 +202,8 @@ namespace Operativka.Controllers
 
             var applicationObjective = await _context.ApplicationObjectives
                 .Include(a => a.ApplicationDocument)
+                .ThenInclude(x => x.Consumer)
+                .ThenInclude(x => x.District)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (applicationObjective == null)
             {
@@ -198,14 +227,14 @@ namespace Operativka.Controllers
             {
                 _context.ApplicationObjectives.Remove(applicationObjective);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Edit), "ApplicationDocuments", new { id = applicationObjective.ApplicationDocumentId });
         }
 
         private bool ApplicationObjectiveExists(int id)
         {
-          return (_context.ApplicationObjectives?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.ApplicationObjectives?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

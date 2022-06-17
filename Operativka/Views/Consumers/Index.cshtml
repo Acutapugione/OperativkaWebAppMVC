@@ -28,44 +28,44 @@
     </p>
 </form>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["FullNameParam"]" >
                     @Html.DisplayNameFor(model => model.Consumers[0].FullName)
                 </a>
             </th>
-            <th>
+            <th scope="col">
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["PersonalAccountCodeParam"]" >
                     @Html.DisplayNameFor(model => model.Consumers[0].PersonalAccountCode)
                 </a>
             </th>
-            <th>
+            <th scope="col">
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["DistrictParam"]" >
                     @Html.DisplayNameFor(model => model.Consumers[0].District)
                 </a>
             </th>
-            <th>
+            <th scope="col">
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressParam"]" >
                     @Html.DisplayNameFor(model => model.Consumers[0].Address)
                 </a>
             </th>
-            <th>
+            <th scope="col">
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["PhoneNumberParam"]" >
                     @Html.DisplayNameFor(model => model.Consumers[0].PhoneNumber)
                 </a>
             </th>
-            <th></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Consumers)
         {
-            <tr>
-                <td>
+            <tr class="table-primary">
+                <th  scope="row">
                     @Html.DisplayFor(modelItem => item.FullName)
-                </td>
+                </th>
                 <td>
                     @Html.DisplayFor(modelItem => item.PersonalAccountCode)
                 </td>

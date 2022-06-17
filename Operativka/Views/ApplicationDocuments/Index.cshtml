@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Operativka.Models.ApplicationDocument>
+﻿@*@model IEnumerable<Operativka.Models.ApplicationDocument>*@
+@model ApplicationDocumentViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -10,39 +11,127 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<form asp-action="Index">
+    <p>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label asp-for="SelectedDistrict" class="form-label"></label>
+                <select asp-for="SelectedDistrict" asp-items="Model.Districts" class="form-control">
+                    <option value="">Виберіть @Html.DisplayNameFor(model => model.SelectedDistrict)</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="InsertedPersonalAccountCode" class="form-label"></label>
+                <input asp-for="InsertedPersonalAccountCode" class="form-control" />
+            </div>
+        </div>
+    </p>
+    <div class="row">
+    <div class="form-group">
+        <input type="submit" value="Пошук" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-danger">Скинути пошук</a>
+    </div>
+    </div>
+
+</form>
+
+<table class="table table-hower">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Consumer)
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["FullNameParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].Consumer.FullName)
+                </a>
+                @*@Html.DisplayNameFor(model => model.Consumer)*@
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OuterAppNum)
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PersonalAccountCodeParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].Consumer.PersonalAccountCode)
+                </a>
+                @*@Html.DisplayNameFor(model => model.OuterAppNum)*@
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsFromOuterApp)
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DistrictParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].Consumer.District)
+                </a>
             </th>
-            <th></th>
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].Consumer.Address)
+                </a>
+            </th>
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PhoneNumberParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].Consumer.PhoneNumber)
+                </a>
+            </th>
+            @*_____*@
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ExecutionDateParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].ExecutionDate)
+                </a>
+            </th>
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PlannedDateParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].PlannedDate)
+                </a>
+            </th>
+            <th scope="col">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["OuterAppNumParam"]">
+                    @Html.DisplayNameFor(model => model.Documents[0].OuterAppNum)
+                </a>
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Documents[0].IsFromOuterApp)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Documents[0].IsExecuted)
+            </th>
+
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Consumer.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OuterAppNum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsFromOuterApp)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Documents)
+        {
+            <tr class="table-success">
+                <th  scope="row">
+                    @Html.DisplayFor(modelItem => item.Consumer.FullName)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.PersonalAccountCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.District.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExecutionDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlannedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OuterAppNum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsFromOuterApp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsExecuted)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -14,12 +14,12 @@ namespace Operativka.Models
         [Display(Name = "Дата запланована")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? PlannedDate => (ApplicationObjectives is null || ApplicationObjectives.Count == 0) ? DateTime.Now : ApplicationObjectives.Min(obj => obj.PlannedDate);
+        public DateTime? PlannedDate => (ApplicationObjectives is null || ApplicationObjectives.Count == 0) ? null : ApplicationObjectives.Min(obj => obj.PlannedDate);
 
         [Display(Name = "Дата виконання")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? ExecutionDate => (ApplicationObjectives is null || ApplicationObjectives.Count == 0) ? DateTime.Now : ApplicationObjectives.Max(obj => obj.ExecutionDate);
+        public DateTime? ExecutionDate => (ApplicationObjectives is null || ApplicationObjectives.Count == 0) ? null : ApplicationObjectives.Max(obj => obj.ExecutionDate);
 
         [Display(Name = "Виконано")]
         public bool IsExecuted => (ApplicationObjectives is null || ApplicationObjectives.Count==0)? false: ApplicationObjectives.All(obj => obj.IsExecuted);
