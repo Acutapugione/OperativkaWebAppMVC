@@ -99,7 +99,7 @@
    asp-route-filterJsoned="@Json.Serialize(Model.CurrentFilter)"
    class="btn btn-default @prevDisabled">
     @*asp-route-currentFilter="@ViewData["CurrentFilter"]"*@
-    Previous
+    Попередня
 </a>
 <a asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
@@ -107,5 +107,5 @@
   asp-route-filterJsoned="@Json.Serialize(Model.CurrentFilter)"
    class="btn btn-default @nextDisabled">
     @* asp-route-currentFilter="@ViewData["CurrentFilter"]"*@
-    Next
+    Наступна
 </a>

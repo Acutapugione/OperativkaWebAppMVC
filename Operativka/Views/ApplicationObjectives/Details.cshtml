@@ -1,14 +1,14 @@
 ﻿@model Operativka.Models.ApplicationObjective
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Деталі";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div>
-    <h4>ApplicationObjective</h4>
+    <h4>Ціль заявки</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -44,6 +44,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Edit" asp-controller="ApplicationDocuments" asp-route-id="@Model.ApplicationDocumentId">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a> |
+    <a asp-action="Edit" asp-controller="ApplicationDocuments" asp-route-id="@Model.ApplicationDocumentId">Повернутися назад</a>
 </div>

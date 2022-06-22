@@ -1,13 +1,13 @@
 ﻿@model Operativka.Models.ApplicationDocument
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редагування";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>ApplicationDocument</h4>
+<h4>Заявка</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -32,7 +32,7 @@
             
             <a asp-action="Create" asp-controller="ApplicationObjectives" asp-route-ApplicationDocumentId="@Model?.Id">Додати ціль заявки</a>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Зберегти" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -75,9 +75,9 @@
                                 @Html.DisplayFor(modelItem => item.IsExecuted)
                             </td>
                             <td>
-                                <a asp-controller="ApplicationObjectives" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-controller="ApplicationObjectives" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-controller="ApplicationObjectives" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a asp-controller="ApplicationObjectives" asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                                <a asp-controller="ApplicationObjectives" asp-action="Details" asp-route-id="@item.Id">Деталі</a> |
+                                <a asp-controller="ApplicationObjectives" asp-action="Delete" asp-route-id="@item.Id">Вилучити</a>
                             </td>
                         </tr>
                     }
@@ -85,7 +85,7 @@
             </table>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Повернутися назад</a>
 </div>
 
 @section Scripts {
